@@ -18,7 +18,7 @@ console.log("---- Task 2 ----");
 
 let myName = 'NoName';
 let message = {};
-message.text = `Привет, мир!\nМеня зовут ` + myName;
+message.text = `Привет, мир!\nМеня зовут ${myName}`
 console.log(message.text);
 
 
