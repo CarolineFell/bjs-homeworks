@@ -12,17 +12,16 @@ function calculateQuadraticEquation() {
 
 function getResult(a,b,c) {
     // код для задачи №1 
-    let D = 0;
     let x = [];
-    D = b**2 - 4*a*c; // объявляем дискриминант
+    let D = b**2 - 4*a*c; // объявляем дискриминант
 
-    if (D == 0) {
-        x = [-1 * b / (2*a)]; // одно значение
+    if (D === 0) {
+        x.push(-1 * b / (2*a)); // одно значение
     } else if (D > 0) {
-        x = [ (-1 * b + Math.sqrt(1, D)) / 2*a, // два значения
-              (-1 * b - Math.sqrt(1, D)) / 2*a]
+        x.push((-1 * b + Math.sqrt(1, D)) / 2*a, // два значения
+               (-1 * b - Math.sqrt(1, D)) / 2*a);
     } else if (D < 0) {
-        x = ['Ø'] + ' Решений нет, т.к. D < 0';
+        x.push();
     }
     return x;
 }
@@ -33,25 +32,22 @@ function calculateAverageRating() {
     window.averageMark.textContent = averageMark;
 }
 
-function getAverageMark(marks) {
-    if (marks.includes(0)) {
-      marks.splice(marks.indexOf(0), 1 ); // убираем нули, если решили оставить оценку на потом
-    }
-    
-    if (marks.length > 5) {
-      marks = marks.slice(0,5); // обрезаем, если оценок более пяти
-    }
-    
+function getAverageMark(marks) {    
     let sum = 0;
     let averageMark = 0;
     
     function calc(marks) {
-      for (let i=0; i<marks.length; i++) {
-        sum += marks[i];
+      for (let i = 0; i < marks.length; i++) {
+          if (marks.length <= 5) {
+              sum += marks[i];
+          } else {
+              marks = marks.slice(0,5);
+              sum += marks[i];
+          }
       }
       return averageMark = (sum/marks.length).toFixed(1); // округляем до десятых
     }
-    return(`${calc(marks)}\nВНИМАНИЕ!\nПрограмма не предусматривает рассчёт среднего значения для более чем пяти оценок.\nВ случае, если оценок более пяти, их количество будет обрезано до первых пяти значений.`);
+    return(`Ответ: ${calc(marks)}. \nВНИМАНИЕ!\nПрограмма не предусматривает рассчёт среднего значения для более чем пяти оценок.\nВ случае, если оценок более пяти, их количество будет обрезано до первых пяти значений.`);
 }
 
 function calculateDrinkTask() {
