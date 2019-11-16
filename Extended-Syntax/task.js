@@ -20,9 +20,7 @@ function getResult(a,b,c) {
     } else if (D > 0) {
         x.push((-1 * b + Math.sqrt(1, D)) / 2*a, // два значения
                (-1 * b - Math.sqrt(1, D)) / 2*a);
-    } else if (D < 0) {
-        x.push();
-    }
+    } 
     return x;
 }
 
@@ -34,20 +32,18 @@ function calculateAverageRating() {
 
 function getAverageMark(marks) {    
     let sum = 0;
-    let averageMark = 0;
-    
-    function calc(marks) {
-      for (let i = 0; i < marks.length; i++) {
-          if (marks.length <= 5) {
-              sum += marks[i];
-          } else {
-              marks = marks.slice(0,5);
-              sum += marks[i];
-          }
-      }
-      return averageMark = (sum/marks.length).toFixed(1); // округляем до десятых
+
+    if (marks.length > 5) {
+        marks = marks.splice(0,5);
+        console.log('ВНИМАНИЕ!\nПрограмма не предусматривает рассчёт среднего значения для более чем пяти оценок.\nВ случае, если оценок более пяти, их количество будет обрезано до первых пяти значений.');
     }
-    return(`Ответ: ${calc(marks)}. \nВНИМАНИЕ!\nПрограмма не предусматривает рассчёт среднего значения для более чем пяти оценок.\nВ случае, если оценок более пяти, их количество будет обрезано до первых пяти значений.`);
+    
+    for (let i = 0; i < marks.length; i++) {
+        sum += marks[i];
+    }
+
+    let averageMark = (sum/marks.length).toFixed(1);
+    return averageMark;
 }
 
 function calculateDrinkTask() {
