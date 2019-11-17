@@ -18,8 +18,8 @@ function getResult(a,b,c) {
     if (D === 0) {
         x.push(-1 * b / (2*a)); // одно значение
     } else if (D > 0) {
-        x.push((-1 * b + Math.sqrt(1, D)) / 2*a, // два значения
-               (-1 * b - Math.sqrt(1, D)) / 2*a);
+        x.push((-1 * b + Math.sqrt(D)) / (2*a), // два значения
+               (-1 * b - Math.sqrt(D)) / (2*a));
     } 
     return x;
 }
