@@ -37,26 +37,34 @@ function showSolutionsMessage(a,b,c) {
 // --- Task 2 --- //
 
 function getAverageScore(data) {
-    let result = {};
-    let totalMark = 0;
-      for (let subject in data) {
-        const averageMark = getAverageArray(data[subject]);
-        result[subject] = averageMark;
-        totalMark += averageMark;
- }
-    // result = Math.round(Object.values(result)); // хотела округлить, но не получилось
-    return result;
-}
-
-function getAverageArray(data) {
-    let sum = 0;
-    for (let i = 0; i < data.length; i++) {
-      sum += data[i];
+    let sum = 0; // total sum
+    let count = 0; // counter
+    let result = {}; // object to get
+    
+    for (let marks in data) { // for...in loop iterating over the object 'data' with the variable 'marks'
+      
+      function countAverage(arr) { // function to count the average of each key
+        let sumMarks = 0; // total sum of each key
+        for (let i = 0; i < arr.length; i++){ // for loop counter
+          sumMarks += arr[i]; // count each key 
+        }
+  
+        let result = Math.round(sumMarks / arr.length); // count average rounding the value of the mark
+        
+        return result;
+      }
+  
+      result[marks] = countAverage(data[marks]); // 'result' is an object with the 'marks' - new property of this object assigned to the function that counts the average of each key of any array
+      sum += countAverage(data[marks]);
+      count++; // go to the next key
     }
-    return sum / data.length;
-}
-
-console.log(getAverageScore(data = {
+  
+  let average = sum / count; // count total average
+  result['average'] = Math.round(average); // make new key rounding the value of the mark
+  return result;
+  }
+  
+  console.log(getAverageScore(data = {
     math: [5, 4, 5, 4, 4, 4, 5, 3],
     geometry: [4, 5, 4, 5, 3, 4, 5, 3, 4, 5],
     russian: [5, 5, 5, 5, 4, 4, 4, 4, 4, 5, 4],
@@ -71,44 +79,39 @@ console.log(getAverageScore(data = {
 
 // --- Task 3 --- //
 
-let secretData = {};
-
-function getPirate(secretData) {
-    if (secretData.aaa === 1 && secretData.bbb === 1) {
-        return {firstName: "Emilio", lastName: "Emilio"};
-    } else if (secretData.bbb === 0 && secretData.bbb === 1) {
-        return {firstName: "Rodrigo", lastName: "Emilio"};
-    } else if (secretData.bbb === 0 && secretData.bbb === 0) {
-        return {firstName: "Rodrigo", lastName: "Rodrigo"};
-    } else if (secretData.bbb === 1 && secretData.bbb === 0) {
-        return {firstName: "Emilio", lastName: "Rodrigo"};
-    }
-}
-
 function getPersonData(secretData) {
-  let result = {};
-  for (let subject in secretData) {
-    const pirate = getPirate(secretData[subject]);
-    result[subject] = pirate;
+    return {
+        'firstName': getPirateFirstName(secretData), // reference to the function with firstName
+        'secondName': getPirateSecondName(secretData) // reference to the function with secondName
+        // to get the object = {firstName(aaa): Rodrigo(0) || Emilio(1), secondName(bbb): Rodrigo(0) || Emilio(1)}
+    }
   }
-}
 
-console.log(getPirate({
-    aaa: 1,
-    bbb: 1,
-}));
+  function getPirateFirstName(secretData) {
+    let keys; // new variable
+    for (let key in secretData) { // for...in loop iterating over the object 'secretData' with the variable 'key'
+      if (key === 'aaa' && secretData[key] === 0) { // secretData = {aaa: 0}
+        keys = 'Rodrigo';
+      } else if(key === 'aaa' && secretData[key]=== 1) { // secretData = {aaa: 1}
+        keys = 'Emilio';
+      }
+    }
+    return keys; // secretData = {key(aaa): Rodrigo || Emilio}
+  }
+  
+  function getPirateSecondName(secretData) {
+    let keys;
+    for (let key in secretData) {
+      if (key === 'bbb' && secretData[key]=== 0) { // secretData = {bbb: 0}
+        keys  = 'Rodrigo';
+      } else if (key === 'bbb' && secretData[key] === 1) { // secretData = {bbb: 1}
+        keys = 'Emilio';
+      }
+    }
+    return keys; // secretData = {key(bbb): Rodrigo || Emilio}
+  }
 
-console.log(getPersonData({
+console.log(getPersonData({ // takes keys aaa and bbb and values 0 || 1
     aaa: 0,
     bbb: 0,
-}));
-
-console.log(getPersonData({
-    aaa: 1,
-    bbb: 1,
-}));
-
-console.log(getPersonData({
-    aaa: 0,
-    bbb: 1,
 }));
