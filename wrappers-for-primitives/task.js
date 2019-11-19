@@ -22,8 +22,8 @@ function calculateTotalMortgage(percent, contribution, amount, date) {
             return value;
         } else if (typeof(input) === 'string') {
             return value = parseInt(input); // value assigns an integer of 'string'
-        } else if (isNaN(input)) {
-            return `В одном из полей значение введено в неверном формате.`;
+        // } else {
+        //     throw 'В одном из полей значение введено в неверном формате.';
         }
     }
     
@@ -59,12 +59,12 @@ function sayHello() {
 
 function getGreeting(name) {
     // код для задачи №2
-    let greeting;
+    let greeting = 'Привет, мир! Меня зовут '
 
     if (typeof(name) === 'string' && name !== '') { // type of name is string AND not a void value
-        greeting = `Привет, мир! Меня зовут ${name}.`;
+        greeting = `${greeting} ${name}.`;
     } else {
-        greeting = 'Привет, мир! Меня зовут Аноним.';
+        greeting = `${greeting} Аноним.`;
     }
  
   return greeting;
