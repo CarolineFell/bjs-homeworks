@@ -13,9 +13,7 @@ function checkBirthday(birthday) {
     let deffInMlSec  = now - birthdayInMlSec;
     let age = deffInMlSec / 1000 / 60 / 60 / 24 / 365.25;
     
-    if (age > 18) {
-        return age;
-   } 
+    return age > 18;
 }
 
 function initPrintAnimalSound() {
@@ -30,10 +28,10 @@ function initPrintAnimalSound() {
 
 function getAnimalSound(animal) {
     // код для задачи №1
-    let sound = animal.sound;
     if (typeof(animal) == 'undefined') {
-        return 'null';
+        return null;
     } else {
+        let sound = animal.sound;
         return sound;
     }
 }
@@ -52,20 +50,8 @@ function getAverageMark(marks) {
     // код для задачи №2
     let sum = 0;
     
-    for (let mark in marks) { 
-      
-      function countAverage(arr) { 
-        let sumMarks = 0;
-        for (let i = 0; i < arr.length; i++){ 
-          sumMarks += arr[i];
-        }
-  
-        let result = Math.round(sumMarks / arr.length); 
-        
-        return result;
-      }
-
-      sum += countAverage(marks[mark]);
+    for (let mark in marks) {
+        sum += parseInt(marks[mark], 10);
     }
 
     let average = sum / marks.length;
