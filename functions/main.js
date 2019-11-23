@@ -60,7 +60,7 @@ function getAverageScore(data) {
     }
   
   let average = sum / count; // count total average
-  result['average'] = Math.round(average); // make new key rounding the value of the mark
+  result.average = average; // make new key rounding the value of the mark
   return result;
   }
   
@@ -80,38 +80,36 @@ function getAverageScore(data) {
 // --- Task 3 --- //
 
 function getPersonData(secretData) {
-    return {
-        'firstName': getPirateFirstName(secretData), // reference to the function with firstName
-        'secondName': getPirateSecondName(secretData) // reference to the function with secondName
-        // to get the object = {firstName(aaa): Rodrigo(0) || Emilio(1), secondName(bbb): Rodrigo(0) || Emilio(1)}
-    }
+  return {
+      'firstName': getPersonName(secretData).key1,
+      'secondName': getPersonName(secretData).key2
   }
+}
 
-  function getPirateFirstName(secretData) {
-    let keys; // new variable
-    for (let key in secretData) { // for...in loop iterating over the object 'secretData' with the variable 'key'
-      if (key === 'aaa' && secretData[key] === 0) { // secretData = {aaa: 0}
-        keys = 'Rodrigo';
-      } else if(key === 'aaa' && secretData[key]=== 1) { // secretData = {aaa: 1}
-        keys = 'Emilio';
+function getPersonName(secretData) {
+  let keys = [];
+
+
+    for (let key1 in secretData) {
+      if (key1 === 'aaa' && secretData[key1] === 0) { 
+        keys.key1 = 'Rodrigo';
+      } else if(key1 === 'aaa' && secretData[key1]=== 1) { 
+        keys.key1 = 'Emilio';
       }
     }
-    return keys; // secretData = {key(aaa): Rodrigo || Emilio}
-  }
+    
+    for (let key2 in secretData) {
+      if (key2 === 'bbb' && secretData[key2]=== 0) { 
+        keys.key2  = 'Rodrigo';
+      } else if (key2 === 'bbb' && secretData[key2] === 1) { 
+        keys.key2 = 'Emilio';
+      }
+    }
   
-  function getPirateSecondName(secretData) {
-    let keys;
-    for (let key in secretData) {
-      if (key === 'bbb' && secretData[key]=== 0) { // secretData = {bbb: 0}
-        keys  = 'Rodrigo';
-      } else if (key === 'bbb' && secretData[key] === 1) { // secretData = {bbb: 1}
-        keys = 'Emilio';
-      }
-    }
-    return keys; // secretData = {key(bbb): Rodrigo || Emilio}
-  }
+return keys;
+}
 
-console.log(getPersonData({ // takes keys aaa and bbb and values 0 || 1
-    aaa: 0,
-    bbb: 0,
-}));
+console.log(getPersonData({aaa: 0, bbb: 0}));
+console.log(getPersonData({aaa: 0, bbb: 1}));
+console.log(getPersonData({aaa: 1, bbb: 0}));
+console.log(getPersonData({aaa: 1, bbb: 1}));
