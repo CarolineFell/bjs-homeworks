@@ -95,12 +95,18 @@ console.log(messageBroken[0] + bow.isBroken() + messageBroken[1]); // true
 console.log(messageDurability + arm.durability); // Infinity
 console.log(messageBroken[0] + arm.isBroken() + messageBroken[1]); // false
 
+class standartWeapon extends Weapon {
+  constructor (name, attack, durability, range) {
+    super (name, attack, durability, range);
+  }
+}
+
 // Варианты оружия
-const hand = new Weapon('Рука', 1, Infinity, 1);
-const bowShort = new Weapon('Лук', 10, 200, 3);
-const swordMiddleAges = new Weapon('Меч', 25, 500, 1);
-const knife = new Weapon('Нож', 5, 300, 1);
-const crook = new Weapon('Посох', 8, 300, 2);
+const hand = new standartWeapon('Рука', 1, Infinity, 1);
+const bowShort = new standartWeapon('Лук', 10, 200, 3);
+const swordMiddleAges = new standartWeapon('Меч', 25, 500, 1);
+const knife = new standartWeapon('Нож', 5, 300, 1);
+const crook = new standartWeapon('Посох', 8, 300, 2);
 
 // Варианты усиленного оружия
 class ImprovedWeapon extends Weapon {
@@ -210,112 +216,125 @@ console.log();
 class StudentLog {
   constructor (name) {
     this.name = name;
+    this.object = {};
+    this.grade = [];
   }
 
   getName() {
-    return this.name;
+    let messageStudent = 'Имя ученика: ';
+    return messageStudent + this.name;
   }
 
-  addGrade(grade, subject) {
-    this.grade = grade;
-    this.subject = subject;
-    
-    let errorMessage = `Внимание! Вы пытались поставить оценку "${this.grade}" по предмету "${this.subject}". Допускаются только числа от 1 до 5.`;
-    let messageGrade = `Количество оценок по ${this.subject}: `;
+  search(subject) {
+    return this.object.find(function(object) {
+      return object.subject === subject;
+    });
+  }  
 
-    for (let i = 0; i < this.grade.length; i++) {
-      if (this.grade[i] > 0 && this.grade[i] < 6) {
-        return messageGrade + this.grade.length;
-      } else if (isNaN(this.grade)) {
-        console.log(messageGrade + 0);
-        return errorMessage;
-      } else if (this.grade[i] < 0 || this.grade[i] > 5) {
-        console.log(messageGrade + this.grade.length);
-        return errorMessage;
-      } else {
-        return messageGrade + 0;
-      }
+  addGrade(grade, subject) {
+    this.object = {[subject]: this.grade};
+
+    let errorMessage = `Внимание! Вы пытались поставить оценку "${grade}" по предмету "${subject}".\nДопускаются только числа от 1 до 5.`;
+    let messageGrade = `Количество оценок по ${subject}: `;
+
+    if (grade > 0 && grade < 6) {
+      this.grade.push(grade);
+      console.log(this.object);
+      return messageGrade + this.object[subject].length;
+    } else if (grade < 0 || grade > 5 || this.grade.some(grade => 'string')) {
+      console.log(messageGrade + this.grade.length);
+      return errorMessage;
+    } else {
+      this.grade.push(grade);
     }
   }
 
   getAverageBySubject(subject) {
-    this.subject = subject;
-
     let messageAverage = `Средняя оценка по ${subject}: `;
     let sum = 0;
 
-    if (this.grade = []) {
-      return messageAverage + 0;
-    } else if (this.subject && this.grade.length > 1) {
-      sum += this.grade[0] + this.grade[1]; // не слышит this.grade[i]
-      let average = sum/this.grade.length;
-      return messageAverage + average;
-    } else if (this.subject && this.grade.length === 1) {
-      sum += this.grade[0];
-      let average = sum/this.grade.length;
-      return messageAverage + average;
-    } else {
-      return 0;
-    }    
+    for (let i = 0; i < this.object[subject].length; i++) {
+      if (this.grade === undefined) {
+        return messageAverage + 0;
+      } else if (this.object[subject].length > 1) {
+        sum += this.object[subject][i];
+        let average = sum / this.object[subject].length;
+        return this.object[subject].length;
+      } else if (this.grade.length === 1) {
+        sum += this.grade[i];
+        let average = sum / this.grade.length;
+        return messageAverage + average;
+      } else {
+        return 0;
+      }    
+    }
   }
 
-  getTotalAverage() {
-    // из-за того, что не получилось правильно создать программу, несмогу запустить этот код
-  }
+  // getTotalAverage() {
+  //   //  получающий среднюю оценку по всем предметам. Средняя оценка рассчитывается как сумма всех оценок на их количество. При отсутствии оценок нужно выдать 0.
+  //   if (this.marks === undefined) {
+  //   return 0;
+  //   } else {
+  //     let total = 0
+  //     let average = 0
+  //     for(let value in this.marks) {  
+  //     total += this.getAverageBySubject( value )
+  //   }
+  //     return total / Object.keys(this.marks).length
+  // }
 }
 
-let messageStudent = 'Имя ученика: ';
-const log = new StudentLog(messageStudent + 'Олег Никифоров');
+const log = new StudentLog('Олег Никифоров');
 
 console.log(log.getName()) // Олег Никифоров
 console.log();
 
-console.log(log.addGrade([3], 'algebra')); // 1
+console.log(log.addGrade(3, 'algebra')); // 1
 // console.log(log.subject);
 // console.log(log.grade);
-// console.log();
+console.log();
 
-console.log(log.addGrade(['отлично!'], 'math')); // Вы пытались поставить оценку "отлично!" по предмету "math". Допускаются только числа от 1 до 5. // 0
+console.log(log.addGrade('отлично!', 'math')); // Вы пытались поставить оценку "отлично!" по предмету "math". Допускаются только числа от 1 до 5. // 0
 // console.log(log.subject);
 // console.log(log.grade);
-// console.log();
+console.log();
 
-console.log(log.addGrade([4], 'algebra')); // 1
+console.log(log.addGrade(4, 'algebra')); // algebra: [ 3, 4 ] // 2
 // console.log(log.subject);
 // console.log(log.grade);
-// console.log();
+console.log();
 
-console.log(log.addGrade([5], 'geometry')); // 1
+console.log(log.addGrade(5, 'geometry')); // 1
 // console.log(log.subject);
 // console.log(log.grade);
-// console.log();
+console.log();
 
-console.log(log.addGrade([25], 'geometry')); // Вы пытались поставить оценку "25" по предмету "geometry". Допускаются только числа от 1 до 5. // 1
+console.log(log.addGrade(25, 'geometry')); // Вы пытались поставить оценку "25" по предмету "geometry". Допускаются только числа от 1 до 5. // 1
 // console.log(log.subject);
 // console.log(log.grade);
 console.log();
 
 
 // add data to the arrays
-log.addGrade([2], 'algebra');
+log.addGrade(2, 'algebra');
 log.grade.push(4);
 // console.log(log.subject + ': ' + log.grade);
 console.log(log.getAverageBySubject('algebra')); // 3
 
-log.addGrade([5], 'geometry');
+log.addGrade(5, 'geometry');
 log.grade.push(4);
 // console.log(log.subject + ': ' + log.grade);
 console.log(log.getAverageBySubject('geometry')); // 4.5
 
-//----------------!!! И вот здесь ломается код !!!----------------\\\
-//----!!! Он начинает ПЕРЕЗАПИСЫВАТЬ предметы и их значения !!!----\\\
-log.addGrade([], 'math');
-console.log(log.getAverageBySubject('math')); // 0
+// //----------------!!! И вот здесь ломается код !!!----------------\\\
+// //----!!! Он начинает ПЕРЕЗАПИСЫВАТЬ предметы и их значения !!!----\\\
+// log.addGrade([], 'math');
+// console.log(log.getAverageBySubject('math')); // 0
 
-console.log();
-// log.addGrade(2, 'algebra');
-// log.addGrade(4, 'algebra');
-// log.addGrade(5, 'geometry');
-// log.addGrade(4, 'geometry');
+// console.log();
+// // log.addGrade(2, 'algebra');
+// // log.addGrade(4, 'algebra');
+// // log.addGrade(5, 'geometry');
+// // log.addGrade(4, 'geometry');
 
-// console.log(log.getToralAverage()); // 3,75
+// // console.log(log.getToralAverage()); // 3,75
