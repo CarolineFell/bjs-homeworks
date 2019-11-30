@@ -19,7 +19,7 @@ function memoize(fn, limit) {
     
     if (result) {
       console.log(messageMemory);
-      return result;
+      return result.result;
     } 
 
     const newResult = fn(...args);
