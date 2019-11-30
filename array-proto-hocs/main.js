@@ -1,8 +1,7 @@
 'use strict'
 
 function compareArrays(arr1, arr2) {
-  let comparedArray = (arr1.length === arr2.length) ? arr1.every((element, index) => element === arr2[index]) : false;
-  return comparedArray;
+  return (arr1.length === arr2.length) ? arr1.every((element, index) => element === arr2[index]) : false;
 }
 
 function memoize(fn, limit) {
@@ -10,12 +9,9 @@ function memoize(fn, limit) {
   let results = []; 
   // хранит историю вызовов возвращаемой memoize функции (mSum)
 
-  return function(...rest) {
-    let args = [...rest]; // Array.from(arguments)
-    // массив аргументов, с которыми была вызывана функция
+  return function(...args) {
     // поиск
     let result = results.find(element => compareArrays(element.args, args));
-    // результат работы
 
     let messageMemory = 'Результат найден в памяти.';
     let messageNotMemory = 'Функция вызвана не из памяти. Результат(ов): ';
@@ -23,16 +19,17 @@ function memoize(fn, limit) {
     
     if (result) {
       console.log(messageMemory);
-    } else {
-      const newResult = fn(...rest);
-      console.log(messageNotMemory + results.push({args, result: newResult}));
+      return result;
+    } 
+
+    const newResult = fn(...args);
+    console.log(messageNotMemory + results.push({args, result: newResult}));
       
-      if (results.length > limit) {
-        results.shift();
-        console.log(messageMaxMemory + limit);
-      }
+    if (results.length > limit) {
+      results.shift();
+      console.log(messageMaxMemory + limit);
     }
-    return results;
+    return newResult;
   }
 }
 
