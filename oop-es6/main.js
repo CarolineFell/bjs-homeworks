@@ -147,13 +147,66 @@ console.log();
 console.log('--- Задача №2. Переработка оружия ---')
 console.log();
 
-class Fist extends Weapon {
-  constructor (name, attack, durability, range) {
-    super (name, attack, durability, range);
+class Sword extends Weapon {
+    constructor () {
+    super ('Старый меч', 20, 10, 1);
   }
 }
 
-const fist = new Fist('Кулак', 10, 400, 2);
+class Arm extends Weapon {
+    constructor () {
+    super ('Рука', 1, Infinity, 1);
+  }
+}
+
+class Bow extends Weapon {
+    constructor () {
+    super ('Лук', 10, 180, 3);
+  }
+}
+
+// Варианты усиленного оружия
+class Fist extends Arm {
+    constructor () {
+    super ();
+    this.name = 'Кулак';
+    this.attack = 10;
+    this.durability = 400; 
+    this.range = 2;
+  }
+}
+
+class Rifle extends Bow {
+    constructor () {
+    super ();
+    this.name = 'Винтовка';
+    this.attack = 50;
+    this.durability = Infinity; 
+    this.range = 10;
+  }
+}
+
+class Shuriken extends Bow {
+    constructor () {
+    super ();
+    this.name = 'Сюрикен';
+    this.attack = 10;
+    this.durability = 3; 
+    this.range = 5;
+  }
+}
+
+class Blade extends Sword {
+    constructor () {
+    super ();
+    this.name = 'Лезвие';
+    this.attack = 5;
+    this.durability = 1; 
+    this.range = 1;
+  }
+}
+
+const fist = new Fist;
 
 console.log(messageName + fist.name); 
 console.log(messageDurability + fist.durability);
@@ -162,13 +215,7 @@ console.log(messageRange + fist.range);
 console.log(messageBroken[0] + fist.isBroken() + messageBroken[1]);
 console.log();
 
-class Rifle extends Weapon {
-  constructor (name, attack, durability, range) {
-    super (name, attack, durability, range);
-  }
-}
-
-const rifle = new Rifle('Винтовка', 50, Infinity, 10);
+const rifle = new Rifle;
 
 console.log(messageName + rifle.name); 
 console.log(messageDurability + rifle.durability);
@@ -177,13 +224,7 @@ console.log(messageRange + rifle.range);
 console.log(messageBroken[0] + rifle.isBroken() + messageBroken[1]);
 console.log();
 
-class Shuriken extends Weapon {
-  constructor (name, attack, durability, range) {
-    super (name, attack, durability, range);
-  }
-}
-
-const shuriken = new Shuriken('Сюрикен', 10, 3, 5);
+const shuriken = new Shuriken;
 
 console.log(messageName + shuriken.name); 
 console.log(messageDurability + shuriken.durability);
@@ -192,13 +233,7 @@ console.log(messageRange + shuriken.range);
 console.log(messageBroken[0] + shuriken.isBroken() + messageBroken[1]);
 console.log();
 
-class Blade extends Weapon {
-  constructor (name, attack, durability, range) {
-    super (name, attack, durability, range);
-  }
-}
-
-const blade = new Blade('Лезвие', 5, 1, 1);
+const blade = new Blade;
 
 console.log(messageName + blade.name); 
 console.log(messageDurability + blade.durability);
@@ -217,7 +252,6 @@ class StudentLog {
   constructor (name) {
     this.name = name;
     this.object = {};
-    this.grade = [];
   }
 
   getName() {
@@ -225,63 +259,65 @@ class StudentLog {
     return messageStudent + this.name;
   }
 
-  search(subject) {
-    return this.object.find(function(object) {
-      return object.subject === subject;
-    });
-  }  
-
   addGrade(grade, subject) {
-    this.object = {[subject]: this.grade};
-
-    let errorMessage = `Внимание! Вы пытались поставить оценку "${grade}" по предмету "${subject}".\nДопускаются только числа от 1 до 5.`;
+    let errorMessage = `Внимание! Вы пытались поставить оценку "${grade}" по предмету "${subject}". Допускаются только числа от 1 до 5.`;
     let messageGrade = `Количество оценок по ${subject}: `;
 
     if (grade > 0 && grade < 6) {
-      this.grade.push(grade);
+
+      if (this.object[subject] !== undefined) {
+		 		this.object[subject].push(grade);
+		 	} else {
+		 		this.object[subject] = [grade];
+		 	}
+
       console.log(this.object);
+		 	return messageGrade + this.object[subject].length;
+
+    } else if (grade < 0 || grade > 5 || this.grade === 'string') {
+      console.log(errorMessage);
       return messageGrade + this.object[subject].length;
-    } else if (grade < 0 || grade > 5 || this.grade.some(grade => 'string')) {
-      console.log(messageGrade + this.grade.length);
-      return errorMessage;
     } else {
-      this.grade.push(grade);
+      console.log(errorMessage);
+      return messageGrade + 0;
     }
   }
 
   getAverageBySubject(subject) {
-    let messageAverage = `Средняя оценка по ${subject}: `;
     let sum = 0;
 
-    for (let i = 0; i < this.object[subject].length; i++) {
-      if (this.grade === undefined) {
-        return messageAverage + 0;
-      } else if (this.object[subject].length > 1) {
+    if (this.object[subject] !== undefined) {
+
+      for (let i = 0; i < this.object[subject].length; i++) {
         sum += this.object[subject][i];
-        let average = sum / this.object[subject].length;
-        return this.object[subject].length;
-      } else if (this.grade.length === 1) {
-        sum += this.grade[i];
-        let average = sum / this.grade.length;
-        return messageAverage + average;
-      } else {
-        return 0;
-      }    
+      }
+
+      return sum / this.object[subject].length;
+
+    } else {
+      return 0;
     }
   }
 
-  // getTotalAverage() {
-  //   //  получающий среднюю оценку по всем предметам. Средняя оценка рассчитывается как сумма всех оценок на их количество. При отсутствии оценок нужно выдать 0.
-  //   if (this.marks === undefined) {
-  //   return 0;
-  //   } else {
-  //     let total = 0
-  //     let average = 0
-  //     for(let value in this.marks) {  
-  //     total += this.getAverageBySubject( value )
-  //   }
-  //     return total / Object.keys(this.marks).length
-  // }
+  getTotalAverage() {
+    let messageTotalAverage = 'Средняя оценка по всем предметам: ';
+    let sum = 0; 
+		let sumTotal = 0;
+
+		let amountMarks = 0; 
+
+		for (let key in this.object) {
+			amountMarks += 1;
+			sum = this.getAverageBySubject(key);
+			sumTotal += sum;
+		}
+
+		if (sumTotal !== 0) {
+			return messageTotalAverage + (sumTotal / amountMarks);
+		} else {
+			return 0;
+		}
+	} 
 }
 
 const log = new StudentLog('Олег Никифоров');
@@ -314,27 +350,16 @@ console.log(log.addGrade(25, 'geometry')); // Вы пытались постав
 // console.log(log.grade);
 console.log();
 
-
-// add data to the arrays
 log.addGrade(2, 'algebra');
-log.grade.push(4);
-// console.log(log.subject + ': ' + log.grade);
-console.log(log.getAverageBySubject('algebra')); // 3
-
+log.addGrade(4, 'algebra');
 log.addGrade(5, 'geometry');
-log.grade.push(4);
-// console.log(log.subject + ': ' + log.grade);
+log.addGrade(4, 'geometry');
+
+console.log();
+
 console.log(log.getAverageBySubject('geometry')); // 4.5
+console.log(log.getAverageBySubject('algebra')); // 3
+console.log(log.getAverageBySubject('math')); // 0
+console.log();
 
-// //----------------!!! И вот здесь ломается код !!!----------------\\\
-// //----!!! Он начинает ПЕРЕЗАПИСЫВАТЬ предметы и их значения !!!----\\\
-// log.addGrade([], 'math');
-// console.log(log.getAverageBySubject('math')); // 0
-
-// console.log();
-// // log.addGrade(2, 'algebra');
-// // log.addGrade(4, 'algebra');
-// // log.addGrade(5, 'geometry');
-// // log.addGrade(4, 'geometry');
-
-// // console.log(log.getToralAverage()); // 3,75
+console.log(log.getTotalAverage()); // 3,75
